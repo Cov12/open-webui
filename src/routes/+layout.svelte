@@ -49,6 +49,9 @@
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
 	import { bestMatchingLanguage } from '$lib/utils';
 	import { setTextScale } from '$lib/utils/text-scale';
+	import { getBrandConfig } from '$lib/branding';
+
+	const brand = getBrandConfig();
 
 	import NotificationToast from '$lib/components/NotificationToast.svelte';
 	import AppSidebar from '$lib/components/app/AppSidebar.svelte';
@@ -748,11 +751,11 @@
 </script>
 
 <svelte:head>
-	<title>{$WEBUI_NAME}</title>
-	<link crossorigin="anonymous" rel="icon" href="{WEBUI_BASE_URL}/static/favicon.png" />
+	<title>{brand.name}</title>
+	<link crossorigin="anonymous" rel="icon" href="{WEBUI_BASE_URL}{brand.faviconPath || '/static/favicon.png'}" />
 
-	<meta name="apple-mobile-web-app-title" content={$WEBUI_NAME} />
-	<meta name="description" content={$WEBUI_NAME} />
+	<meta name="apple-mobile-web-app-title" content={brand.name} />
+	<meta name="description" content={brand.name} />
 	<link
 		rel="search"
 		type="application/opensearchdescription+xml"

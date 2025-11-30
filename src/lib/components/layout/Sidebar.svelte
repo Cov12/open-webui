@@ -63,7 +63,9 @@
 	import Note from '../icons/Note.svelte';
 	import { slide } from 'svelte/transition';
 	import HotkeyHint from '../common/HotkeyHint.svelte';
+	import { getBrandConfig } from '$lib/branding';
 
+	const brand = getBrandConfig();
 	const BREAKPOINT = 768;
 
 	let scrollTop = 0;
@@ -564,9 +566,13 @@
 					>
 						<div class=" self-center flex items-center justify-center size-9">
 							<img
-								src="{WEBUI_BASE_URL}/static/favicon.png"
+								src="{WEBUI_BASE_URL}{brand.logoPath}"
 								class="sidebar-new-chat-icon size-6 rounded-full group-hover:hidden"
-								alt=""
+								alt="{brand.name}"
+								on:error={(e) => {
+									// Fallback to default favicon if brand logo is missing
+									e.currentTarget.src = `${WEBUI_BASE_URL}/static/favicon.png`;
+								}}
 							/>
 
 							<Sidebar className="size-5 hidden group-hover:flex" />
@@ -742,9 +748,13 @@
 				>
 					<img
 						crossorigin="anonymous"
-						src="{WEBUI_BASE_URL}/static/favicon.png"
+						src="{WEBUI_BASE_URL}{brand.logoPath}"
 						class="sidebar-new-chat-icon size-6 rounded-full"
-						alt=""
+						alt="{brand.name}"
+						on:error={(e) => {
+							// Fallback to default favicon if brand logo is missing
+							e.currentTarget.src = `${WEBUI_BASE_URL}/static/favicon.png`;
+						}}
 					/>
 				</a>
 
@@ -753,7 +763,7 @@
 						id="sidebar-webui-name"
 						class=" self-center font-medium text-gray-850 dark:text-white font-primary"
 					>
-						{$WEBUI_NAME}
+						{brand.name}
 					</div>
 				</a>
 				<Tooltip

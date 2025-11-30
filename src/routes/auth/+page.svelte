@@ -13,6 +13,9 @@
 
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
 	import { WEBUI_NAME, config, user, socket } from '$lib/stores';
+	import { getBrandConfig } from '$lib/branding';
+
+	const brand = getBrandConfig();
 
 	import { generateInitialsImage, canvasPixelTest } from '$lib/utils';
 
@@ -184,7 +187,7 @@
 
 <svelte:head>
 	<title>
-		{`${$WEBUI_NAME}`}
+		{`${brand.name}`}
 	</title>
 </svelte:head>
 
@@ -213,7 +216,7 @@
 							class="flex items-center justify-center gap-3 text-xl sm:text-2xl text-center font-medium dark:text-gray-200"
 						>
 							<div>
-								{$i18n.t('Signing in to {{WEBUI_NAME}}', { WEBUI_NAME: $WEBUI_NAME })}
+								{$i18n.t('Signing in to {{WEBUI_NAME}}', { WEBUI_NAME: brand.name })}
 							</div>
 
 							<div>
@@ -225,15 +228,19 @@
 					<div class="my-auto flex flex-col justify-center items-center">
 						<div class=" sm:max-w-md my-auto pb-10 w-full dark:text-gray-100">
 							{#if $config?.metadata?.auth_logo_position === 'center'}
-								<div class="flex justify-center mb-6">
-									<img
-										id="logo"
-										crossorigin="anonymous"
-										src="{WEBUI_BASE_URL}/static/favicon.png"
-										class="size-24 rounded-full"
-										alt=""
-									/>
-								</div>
+						<div class="flex justify-center mb-6">
+							<img
+								id="logo"
+								crossorigin="anonymous"
+								src="{WEBUI_BASE_URL}{brand.logoPath}"
+								class="size-24 rounded-full"
+								alt="{brand.name}"
+								on:error={(e) => {
+									// Fallback to default favicon if brand logo is missing
+									e.currentTarget.src = `${WEBUI_BASE_URL}/static/favicon.png`;
+								}}
+							/>
+						</div>
 							{/if}
 							<form
 								class=" flex flex-col justify-center"
@@ -245,19 +252,25 @@
 								<div class="mb-1">
 									<div class=" text-2xl font-medium">
 										{#if $config?.onboarding ?? false}
-											{$i18n.t(`Get started with {{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
+											{$i18n.t(`Get started with {{WEBUI_NAME}}`, { WEBUI_NAME: brand.name })}
 										{:else if mode === 'ldap'}
-											{$i18n.t(`Sign in to {{WEBUI_NAME}} with LDAP`, { WEBUI_NAME: $WEBUI_NAME })}
+											{$i18n.t(`Sign in to {{WEBUI_NAME}} with LDAP`, { WEBUI_NAME: brand.name })}
 										{:else if mode === 'signin'}
-											{$i18n.t(`Sign in to {{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
+											{$i18n.t(`Sign in to {{WEBUI_NAME}}`, { WEBUI_NAME: brand.name })}
 										{:else}
-											{$i18n.t(`Sign up to {{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
+											{$i18n.t(`Sign up to {{WEBUI_NAME}}`, { WEBUI_NAME: brand.name })}
 										{/if}
 									</div>
+									
+									{#if brand.tagline}
+										<div class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+											{brand.tagline}
+										</div>
+									{/if}
 
 									{#if $config?.onboarding ?? false}
 										<div class="mt-1 text-xs font-medium text-gray-600 dark:text-gray-500">
-											ⓘ {$WEBUI_NAME}
+											ⓘ {brand.name}
 											{$i18n.t(
 												'does not make any external connections, and your data stays securely on your locally hosted server.'
 											)}
