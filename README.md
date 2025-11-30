@@ -242,4 +242,9 @@ If you have any questions, suggestions, or need assistance, please open an issue
 
 ---
 
+## Branch Structure
+
+- **main**: tracks upstream (open-webui/open-webui) - clean mirror for easy updates
+- **brand**: Pursuit Creative / Cov custom rebrand with client features
+
 Created by [Timothy Jaeryang Baek](https://github.com/tjbck) - Let's make Open WebUI even more amazing together! 💪
